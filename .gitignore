@@ -1,3 +1,7 @@
+# My ignores
+.vscode/
+out_text.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
