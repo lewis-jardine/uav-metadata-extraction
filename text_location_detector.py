@@ -4,6 +4,7 @@ import numpy as np
 import argparse
 import imutils
 import cv2
+import pytesseract
 
 def decode_predictions(scores, geometry):
     # grab the number of rows and columns from the scores volume, then
@@ -99,6 +100,9 @@ vs = cv2.VideoCapture(args["video"])
 # start the FPS throughput estimator
 fps = FPS().start()
 
+# create new file
+open("out_text.txt", "w").close()
+
 #loop over frames from the video
 while True:
     # grab the current frame
@@ -141,6 +145,14 @@ while True:
         startY = int(startY * rH)
         endX = int(endX * rW)
         endY = int(endY * rH)
+
+        # create cropped copy
+        cropped = orig.copy()
+        cropped = cropped[startY: endY, startX: endX]
+        text = pytesseract.image_to_string(cropped)
+        file = open("out_text.txt", "a")
+        file.write(text)
+        file.close()
 
         # draw the bounding box on the frame
         cv2.rectangle(orig, (startX, startY), (endX, endY), (0, 255, 0), 2)
